@@ -1,0 +1,5 @@
+#!/bin/bash
+# nightly local disk back up
+rsync -avzh --delete /media/data/MAS90-backup/ /media/lbe_server/MAS90420-01/ > /tmp/local-backup-log.txt
+echo "Here is today's MAS 90 local backup log file." | mail -s "Local Backup Log" -a /tmp/local-backup-log.txt shannon@lightbulbsdirect.com tracy@lightbulbsdirect.com
+

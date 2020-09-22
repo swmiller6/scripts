@@ -1,0 +1,26 @@
+#!/bin/bash
+inotifywait -mq --format '%e' /media/data/MAS90-backup/IMPORT/Tracking-Import/ |
+while IFS= read -r events; do
+sleep 10;
+# set path variables
+invoiceList=/media/data/MAS90-backup/IMPORT/Tracking-Import/Book1.txt
+trackingNumbers=/media/data/MAS90-backup/IMPORT/Tracking-Import/sw-tracking.txt
+processedDirectory=/media/data/MAS90-backup/IMPORT/
+
+	awk 'BEGIN{FS=OFS="\t"}
+
+        # populate alias file array
+        NR==FNR{a[$1]=$0;next
+        }
+
+        {
+        # for matching import field 1 in import file array split tab delimited fields into line array
+        split(a[$1],line,"\t")
+
+        # if sale order numbers match add tracking number to column  
+        if ($1==line[1])
+            {
+		    $2=substr(line[2],1,7);
+            }
+        print > "'"$processedDirectory"'""/tracking-import.txt"}' $invoiceList $trackingNumbers &
+done

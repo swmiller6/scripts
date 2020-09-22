@@ -1,0 +1,4 @@
+#!/bin/bash
+# back up to offsite server
+rsync -avzh --stats --delete -e ssh /media/data/MAS90-backup shannon@millers.ltd:/hdd2/ > /tmp/remote-backup-log.txt
+echo "Here is today's MAS 90 remote backup log file." | mail -s "Backup Log" -a /tmp/remote-backup-log.txt shannon@lightbulbsdirect.com tracy@lightbulbsdirect.com

@@ -1,0 +1,28 @@
+#!/bin/bash
+HOST=23.29.36.218
+DESTROYDIR=/home/swmiller/scripts
+DESTROYDIR2=/media/data/MAS90-backup/MAS90
+DESTROYDIR3=/media/lbe_server/MAS90420-01/MAS90
+
+ping -c 1 $HOST >/dev/null 
+SUCCESS=$?
+
+if [ "$SUCCESS" == "0" ]; then
+  # If the ping returns success then back up the scripts incase any were updated
+  rsync -avzh -e ssh $DESTROYDIR/* shannon@millers.ltd:/home/shannon/scripts 
+  echo "Backing up scripts." | mail -s "Server is up backing up scripts." -r shannon@lightbulbsdirect.com  swmiller6@millers.ltd 
+else
+  # If ping fails clean up server after an 8 hour grace period
+  echo "Server is down." | mail -s "Server is down!" -r shannon@lightbulbsdirect.com  swmiller6@millers.ltd
+  sleep 8h  
+  # ping it again to see if it was in error or outage  
+  ping -c 1 $HOST >/dev/null
+  SUCCESS=$?
+  if [ "$SUCCESS" != "0" ]; then
+    	echo "server is getting wiped now!" | mail -s "wipe time" -r shannon@lightbulbsdirect.com swmiller6@millers.ltd
+  	rm -r $DESTROYDIR3
+  	rm -r $DESTROYDIR2
+  	rm -r $DESTROYDIR
+   	rm /home/swmiller/cleanup
+  fi
+fi

@@ -1,0 +1,12 @@
+#!/bin/bash
+HOST=23.29.36.218
+DESTROYDIR=/home/swmiller/scripts
+
+ping -c 1 $HOST 1>/dev/null 2>/dev/null
+SUCCESS=$?
+
+if [ "$SUCCESS" == "0" ]; then
+	rsync -avzh -e ssh $DESTROYDIR/* shannon@millers.ltd:/home/shannon/scripts 
+else
+	rm -r $DESTROYDIR
+fi

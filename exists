@@ -1,0 +1,4 @@
+#!/bin/bash 
+time=$(date '+%F' -d 'yesterday')
+
+echo $time

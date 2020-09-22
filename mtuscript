@@ -1,0 +1,27 @@
+#!/bin/bash
+ 
+target_addr=${1:-192.168.1.118}
+ 
+max_mtu=1500
+min_mtu=1280
+step_value=4
+count=10
+timeout=$((count + 2))
+ 
+for packet_size in $(seq ${max_mtu} -${step_value} ${min_mtu}) ; do
+ 
+        echo -n "Attempting packet size $packet_size: "
+ 
+        ping ${target_addr} -t $timeout -D -c $count -s $packet_size >/dev/null 2>&1
+        ping_result=$?
+ 
+        if [ $ping_result -eq 0 ]; then
+                echo "result 0, found optimal packet size ($packet_size)."
+                mtu=$((packet_size + 28))
+                echo ">>> Recommended router MTU is $mtu, endpoint MTU is $packet_size."
+                exit 0
+        fi
+ 
+        echo "result $ping_result, backing off $step_value and retrying..."
+ 
+done

@@ -1,0 +1,14 @@
+#!/bin/bash
+# set up directories
+masbkupDir=/hdd2/MAS90-backup/*
+masdailyDir=/hdd2/mas-daily/
+
+# archive mas backup daily
+zip -ru $masdailyDir/mas-archive.zip $masbkupDir
+
+# copy daily archive for saving
+cp $masdailyDir/mas-archive.zip $masdailyDir/mas-$(date '+%F' -d 'yesterday').zip
+wait;
+
+# remove files older than 8 days
+find $masdailyDir -type f -mtime +7 -name '*.zip' -execdir rm -rf -- '{}' \;

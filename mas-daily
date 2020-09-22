@@ -1,0 +1,13 @@
+#!/bin/bash
+# Mas 90 daily back up for Light Bulbs Direct
+TIME=$(date '+%F' -d 'yesterday')   # This gets the date for yesterday so the file date is correct
+FILENAME=mas-$TIME.tar.gz           # This is the file name with date
+DESTDIR=/hdd2/mas-daily             # This is the directory to store the back up
+SRCDIR=/hdd2/MAS90-backup/MAS90               # Change to the dirctory with our backup data in it
+
+tar -cpzf $DESTDIR/$FILENAME $SRCDIR
+
+wait;
+
+# remove files older than 8 days
+find $DESTDIR -type f -mtime +7 -name '*.tar.gz' -execdir rm -rf -- '{}' \;

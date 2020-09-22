@@ -1,0 +1,7 @@
+#!/bin/bash
+while true ; do
+        if [ $(ls -1A /media/data/MAS90-backup/IMPORT/Amazon/DownloadDir/ | wc -l) -gt 0 ] ; then
+		/home/swmiller/scripts/amazon-import.sh
+	fi
+sleep 3 
+done

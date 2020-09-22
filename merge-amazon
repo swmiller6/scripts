@@ -1,0 +1,22 @@
+#!/bin/bash
+processedDir=/media/data/MAS90-backup/IMPORT/Amazon/ImportDir
+
+# create loop to monitor directory
+while true ; do 
+	# check for duplicates before attempting to concate the files
+	if [ $(ls -1A $processedDir | wc -l) -ge 3 ] ; then
+		# make sure one of the files is not the merged file
+		if [ -e $processedDir/merged-amazon.txt ] ; then
+			rm $processedDir/merged-amazon.txt 
+		fi
+		# if there are duplicates remove them
+		rdfind  -deleteduplicates true $processedDir > /dev/null
+	fi
+	# merge files if 3 or more non duplicate files exist
+	if [ $(ls -1A $processedDir | wc -l) -ge 3 ] ; then
+		cat $processedDir/amazon--* > $processedDir/merged-amazon.txt
+		# remove files after being merged
+		rm $processedDir/amazon--*
+	fi
+sleep 3		
+done

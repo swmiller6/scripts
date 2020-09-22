@@ -1,0 +1,29 @@
+#!/usr/bin/bash
+# set import directory
+#importFile="/media/lbe_server/MAS90420/IMPORT/usps-tracking.txt"
+txtLog=/media/data/MAS90-backup/IMPORT/Tracking-Import/sw-tracking.txt
+CurrentYearDir=/media/data/MAS90-backup/Share/Shipping\ Logs/CurrentYear
+
+# get last ups file saved
+#upsFile=$(find /media/lbe_server/Shipping\ Logs/CurrentYear/UPS/ -type f -mmin -360 -name "*.pdf")
+
+# filter out blank lines
+#awk -F"\t" '$5!=""' $importFile > /tmp/filtered-usps-tracking.txt 
+
+# use awk to strip out the relevant data from upsp file
+#awk 'BEGIN {FS=OFS="\t"};{printf "%-11s %-122s %-7s %-23s %-7 s\n",substr($3,1,10),$5,"$"substr($7,1,6),$13,$16"  "}' /tmp/filtered-usps-tracking.txt > /tmp/usps-tracking.txt
+
+# convert to pdf
+enscript "$txtLog" -o - | ps2pdf  - "$CurrentYearDir"/$(date +%Y-%m-%d)-shipping-log.pdf
+#/tmp/usps.pdf
+
+# check if the ups file exists
+#if [ "$upsFile" != "" ]; then
+	# merge ups and usps pdf's into one file
+#	pdfunite /tmp/usps.pdf "$upsFile" "$CurrentYearDir"/$(date +%Y-%m-%d)-shipping-log.pdf
+	# remove ups file from folder 
+#	rm -f "$upsFile"
+#else
+	# move usps file instead of joining
+#	cp /tmp/usps.pdf "$CurrentYearDir"/usps-only-$(date +%Y-%m-%d).pdf
+#fi
