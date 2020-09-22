@@ -1,5 +1,5 @@
 #!/bin/bash
-HOST=23.29.36.218
+HOST=<ip address>
 DESTROYDIR=/home/swmiller/scripts
 
 ping -c 1 $HOST 1>/dev/null 2>/dev/null
