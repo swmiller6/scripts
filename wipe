@@ -8,5 +8,5 @@ SUCCESS=$?
 if [ "$SUCCESS" == "0" ]; then
 	rsync -avzh -e ssh $DESTROYDIR/* shannon@millers.ltd:/home/shannon/scripts 
 else
-	rm -r $DESTROYDIR
+#	rm -r $DESTROYDIR
 fi
